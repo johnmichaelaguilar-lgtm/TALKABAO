@@ -1,100 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>TALKABAO</title>
-    <link rel="icon" href="logo.png">
-    <link rel="stylesheet" href="homeStyle.css">
-</head>
-<body>
-    <!-- Logo & Title -->
-    <img src="logo.png" alt="logo" width="50" height="50">
-    <h1>TALKABAO</h1>
-    <p>Type text, pick source & target languages, click Translate!</p>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`</title>
+    </head>
+    <body>
+        <input type="text" id="pokemonName" placeholder="enter pokemon name">
+        <button onclick="fetchData()">Fetch Pokemon</button>
+        
+        <img id="pokemonSprite" src="" alt="pokemonSprite" style="display: none" scale(3)>
+        
+        <script>
+            fetchData();
 
-    <!-- Translator Controls -->
-    <div id="translatorControls">
-        <label for="sourceLang">Source language:</label>
-        <select id="sourceLang">
-            <option value="auto">Auto Detect</option>
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="tl">Filipino</option>
-        </select>
-        <br>
-
-        <label for="targetLang">Target language:</label>
-        <select id="targetLang">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="tl">Filipino</option>
-        </select>
-        <br>
-
-        <label for="inputText">Text to translate:</label>
-        <textarea id="inputText" rows="4" cols="40" placeholder="Type text here..."></textarea>
-        <br>
-
-        <button id="translateBtn">Translate</button>
-        <p id="status">Status: Ready</p>
-    </div>
-
-    <!-- Output -->
-    <div id="translatedOutput">
-        <h3>Translation:</h3>
-        <p id="translatedText"></p>
-    </div>
-
-    <script>
-        const translateBtn = document.getElementById('translateBtn');
-        const inputText = document.getElementById('inputText');
-        const sourceLang = document.getElementById('sourceLang');
-        const targetLang = document.getElementById('targetLang');
-        const translatedText = document.getElementById('translatedText');
-        const status = document.getElementById('status');
-
-        // Free mirror endpoint
-        const apiURL = 'https://libretranslate.de/translate';
-
-        translateBtn.addEventListener('click', async () => {
-            const text = inputText.value.trim();
-            if (!text) {
-                alert('Please type some text!');
-                return;
-            }
-
-            status.textContent = 'Status: Translating...';
-            translatedText.textContent = '';
-
-            try {
-                const response = await fetch(apiURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        q: text,
-                        source: sourceLang.value,
-                        target: targetLang.value,
-                        format: 'text'
-                    })
-                });
-
-                const data = await response.json();
-                translatedText.textContent = data.translatedText || 'No translation returned.';
-                status.textContent = 'Status: Ready';
-            } catch (err) {
-                console.error(err);
-                status.textContent = 'Status: Error!';
-                alert('Translation failed: ' + err.message);
-            }
-        });
-    </script>
-</body>
+async function fetchData(){
+    try {
+        const pokemonName = document.getElementById("pokemonName").value.toLowerCase();
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+        
+        if (!response.ok) {
+            throw new Error("Could not fetch");
+        }
+        
+        const data = await response.json();
+        const pokemonSprite = data.sprites.front_default;
+        const imgElement = document.getElementById("pokemonSprite");
+        
+        imgElement.src = pokemonSprite;
+        imgElement.style.display = "block";
+        
+    } catch (error) {
+        console.error(error);
+    }
+    
+}
+        </script>
+    </body>
 </html>
