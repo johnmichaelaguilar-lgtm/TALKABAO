@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Translator</title>
+    <meta charset="UTF-8">
+    <title>High-Accuracy Free Translator</title>
+    <style>
+    </style>
 </head>
 <body>
-  <textarea id="text" placeholder="Type Tagalog text here..."></textarea><br>
-  <select id="lang">
-    <option value="en">English</option>
-    <option value="es">Spanish</option>
-    <option value="fr">French</option>
-    <option value="de">German</option>
-    <option value="ja">Japanese</option>
-  </select>
-  <button onclick="translate()">Translate</button>
-  <div id="result"></div>
 
-  <script>
-    async function translate() {
-      const text = document.getElementById("text").value;
-      const target = document.getElementById("lang").value;
-      document.getElementById("result").innerText = "Translating...";
+<div class="container">
+    <h2>Reliable Free Translator</h2>
+    <textarea id="sourceText" placeholder="Type something here..."></textarea>
+    
+    <div class="controls">
+        <select id="targetLang">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="tl">Tagalog</option>
+            <option value="ja">Japanese</option>
+        </select>
+        <button id="translateBtn">Translate</button>
+    </div>
 
-      try {
-        const res = await fetch("http://localhost:3000/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ q: text, target })
-        });
-        const data = await res.json();
-        document.getElementById("result").innerText = data.translatedText || data.error;
-      } catch (err) {
-        document.getElementById("result").innerText = "Error: " + err.message;
-      }
-    }
-  </script>
+    <div id="output">Result will appear here...</div>
+</div>
+
+<script>
+    const btn = document.getElementById('translateBtn');
+    const input = document.getElementById('sourceText');
+    const output = document.getElementById('output');
+    const target = document.getElementById('targetLang');
+
+    // List of public Lingva instances (if one is slow, you can try another)
+    const API_BASE = "https://lingva.ml/api/v1"; 
+
+    btn.addEventListener('click', async () => {
+        const text = input.value.trim();
+        if (!text) return;
+
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+        output.style.color = "#666";
+
+        try {
+            // Lingva Format: /api/v1/:source/:target/:query
+            const url = `${API_BASE}/auto/${target.value}/${encodeURIComponent(text)}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.translation) {
+                output.innerText = data.translation;
+                output.style.color = "#000";
+            } else {
+                throw new Error("No translation returned");
+            }
+        } catch (err) {
+            output.innerText = "Error: API limit reached or instance down. Try again in a moment.";
+            output.style.color = "red";
+            console.error(err);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Translate";
+        }
+    });
+</script>
+
 </body>
 </html>
