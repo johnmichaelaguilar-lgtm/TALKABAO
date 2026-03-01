@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="homeStyle.css">
+    <title>HOME</title>
+</head>
+<body>
+    <!-- Logo -->
+    <img src="logo.png" alt="logo" width="50" height="50">
+
+    <!-- Title & Instruction -->
+    <h1>TALKABAO</h1>
+    <p>Type text, click Translate, and see literal & casual translations! Try it now!</p>
+
+    <!-- Translator Controls -->
+    <div id="translatorControls">
+        <label for="inputText">Enter text to Translate:</label>
+        <textarea id="inputText" placeholder="Type your text here..." rows="4" cols="40"></textarea>
+        <br>
+
+        <label for="targetLang">Choose language:</label>
+        <select id="targetLang">
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+            <option value="tl">Filipino</option>
+        </select>
+        <br>
+
+        <button id="translateBtn">Translate</button>
+        <br>
+        <label>
+            <input type="checkbox" id="serviceToggle" checked> Service Online
+        </label>
+    </div>
+
+    <!-- Status Indicator -->
+    <p id="status">Status: Ready</p>
+
+    <!-- Output -->
+    <div id="translatedOutput">
+        <h3>Translation:</h3>
+        <p id="translatedText"></p>
+        <button id="speakBtn">Speak</button>
+    </div>
+
+    <!-- Info -->
+    <p>Literal translations follow formal grammar. Casual translations are more natural for everyday conversation.</p>
+
+    <script src="javaScript.js"></script>
+</body>
+</html>
