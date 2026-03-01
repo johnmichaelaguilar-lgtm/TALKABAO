@@ -1,54 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>TALKABAO</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="homeStyle.css">
+    <title>HOME</title>
 </head>
 <body>
+    <!-- Logo -->
+    <img src="logo.png" alt="logo" width="50" height="50">
 
-<h1>TALKABAO</h1>
-<textarea id="inputText" rows="4" cols="40" placeholder="Type text here..."></textarea>
-<br>
-<select id="targetLang">
-    <option value="es">Spanish</option>
-    <option value="fr">French</option>
-    <option value="de">German</option>
-    <option value="ja">Japanese</option>
-    <option value="ko">Korean</option>
-    <option value="tl">Filipino</option>
-</select>
-<br>
-<button id="translateBtn">Translate</button>
+    <!-- Title & Instruction -->
+    <h1>TALKABAO</h1>
+    <p>Type text, click Translate, and see literal & casual translations! Try it now!</p>
 
-<p id="status">Status: Ready</p>
-<p id="translatedText"></p>
+    <!-- Translator Controls -->
+    <div id="translatorControls">
+        <label for="inputText">Enter text to Translate:</label>
+        <textarea id="inputText" placeholder="Type your text here..." rows="4" cols="40"></textarea>
+        <br>
 
-<script>
-const translateBtn = document.getElementById("translateBtn");
+        <label for="targetLang">Choose language:</label>
+        <select id="targetLang">
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+            <option value="tl">Filipino</option>
+        </select>
+        <br>
+
+        <button id="translateBtn">Translate</button>
+        <br>
+        <label>
+            <input type="checkbox" id="serviceToggle" checked> Service Online
+        </label>
+    </div>
+
+    <!-- Status Indicator -->
+    <p id="status">Status: Ready</p>
+
+    <!-- Output -->
+    <div id="translatedOutput">
+        <h3>Translation:</h3>
+        <p id="translatedText"></p>
+    </div>
+
+    <script>
+const libreURL = "https://libretranslate.de/translate";
+
 const inputText = document.getElementById("inputText");
 const targetLang = document.getElementById("targetLang");
 const translatedText = document.getElementById("translatedText");
 const status = document.getElementById("status");
+const translateBtn = document.getElementById("translateBtn");
 
-translateBtn.addEventListener("click", async () => {
+translateBtn.addEventListener("click", translateText);
+
+async function translateText() {
     const text = inputText.value.trim();
-    if (!text) return alert("Type something!");
+    const lang = targetLang.value;
+
+    if (!text) {
+        alert("Please type some text to translate!");
+        return;
+    }
 
     status.textContent = "Status: Translating...";
     translatedText.textContent = "";
 
     try {
-        const res = await fetch("https://libretranslate.com/translate", {
+        const response = await fetch(libreURL, {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 q: text,
-                source: "en",
-                target: targetLang.value,
+                source: "en",   // assume input is English
+                target: lang,
                 format: "text"
-            }),
-            headers: { "Content-Type": "application/json" }
+            })
         });
-        const data = await res.json();
+
+        const data = await response.json();
         translatedText.textContent = data.translatedText || "No translation returned.";
         status.textContent = "Status: Ready";
     } catch (err) {
@@ -56,8 +90,197 @@ translateBtn.addEventListener("click", async () => {
         status.textContent = "Status: Error!";
         alert("Translation failed: " + err.message);
     }
-});
-</script>
+}
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="homeStyle.css">
+    <title>HOME</title>
+</head>
+<body>
+    <!-- Logo -->
+    <img src="logo.png" alt="logo" width="50" height="50">
 
+    <!-- Title & Instruction -->
+    <h1>TALKABAO</h1>
+    <p>Type text, click Translate, and see literal & casual translations! Try it now!</p>
+
+    <!-- Translator Controls -->
+    <div id="translatorControls">
+        <label for="inputText">Enter text to Translate:</label>
+        <textarea id="inputText" placeholder="Type your text here..." rows="4" cols="40"></textarea>
+        <br>
+
+        <label for="targetLang">Choose language:</label>
+        <select id="targetLang">
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+            <option value="tl">Filipino</option>
+        </select>
+        <br>
+
+        <button id="translateBtn">Translate</button>
+        <br>
+        <label>
+            <input type="checkbox" id="serviceToggle" checked> Service Online
+        </label>
+    </div>
+
+    <!-- Status Indicator -->
+    <p id="status">Status: Ready</p>
+
+    <!-- Output -->
+    <div id="translatedOutput">
+        <h3>Translation:</h3>
+        <p id="translatedText"></p>
+    </div>
+
+    <script>
+const libreURL = "https://libretranslate.de/translate";
+
+const inputText = document.getElementById("inputText");
+const targetLang = document.getElementById("targetLang");
+const translatedText = document.getElementById("translatedText");
+const status = document.getElementById("status");
+const translateBtn = document.getElementById("translateBtn");
+
+translateBtn.addEventListener("click", translateText);
+
+async function translateText() {
+    const text = inputText.value.trim();
+    const lang = targetLang.value;
+
+    if (!text) {
+        alert("Please type some text to translate!");
+        return;
+    }
+
+    status.textContent = "Status: Translating...";
+    translatedText.textContent = "";
+
+    try {
+        const response = await fetch(libreURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                q: text,
+                source: "en",   // assume input is English
+                target: lang,
+                format: "text"
+            })
+        });
+
+        const data = await response.json();
+        translatedText.textContent = data.translatedText || "No translation returned.";
+        status.textContent = "Status: Ready";
+    } catch (err) {
+        console.error(err);
+        status.textContent = "Status: Error!";
+        alert("Translation failed: " + err.message);
+    }
+}
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="homeStyle.css">
+    <title>HOME</title>
+</head>
+<body>
+    <!-- Logo -->
+    <img src="logo.png" alt="logo" width="50" height="50">
+
+    <!-- Title & Instruction -->
+    <h1>TALKABAO</h1>
+    <p>Type text, click Translate, and see literal & casual translations! Try it now!</p>
+
+    <!-- Translator Controls -->
+    <div id="translatorControls">
+        <label for="inputText">Enter text to Translate:</label>
+        <textarea id="inputText" placeholder="Type your text here..." rows="4" cols="40"></textarea>
+        <br>
+
+        <label for="targetLang">Choose language:</label>
+        <select id="targetLang">
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+            <option value="tl">Filipino</option>
+        </select>
+        <br>
+
+        <button id="translateBtn">Translate</button>
+        <br>
+        <label>
+            <input type="checkbox" id="serviceToggle" checked> Service Online
+        </label>
+    </div>
+
+    <!-- Status Indicator -->
+    <p id="status">Status: Ready</p>
+
+    <!-- Output -->
+    <div id="translatedOutput">
+        <h3>Translation:</h3>
+        <p id="translatedText"></p>
+    </div>
+
+    <script>
+const libreURL = "https://libretranslate.de/translate";
+
+const inputText = document.getElementById("inputText");
+const targetLang = document.getElementById("targetLang");
+const translatedText = document.getElementById("translatedText");
+const status = document.getElementById("status");
+const translateBtn = document.getElementById("translateBtn");
+
+translateBtn.addEventListener("click", translateText);
+
+async function translateText() {
+    const text = inputText.value.trim();
+    const lang = targetLang.value;
+
+    if (!text) {
+        alert("Please type some text to translate!");
+        return;
+    }
+
+    status.textContent = "Status: Translating...";
+    translatedText.textContent = "";
+
+    try {
+        const response = await fetch(libreURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                q: text,
+                source: "en",   // assume input is English
+                target: lang,
+                format: "text"
+            })
+        });
+
+        const data = await response.json();
+        translatedText.textContent = data.translatedText || "No translation returned.";
+        status.textContent = "Status: Ready";
+    } catch (err) {
+        console.error(err);
+        status.textContent = "Status: Error!";
+        alert("Translation failed: " + err.message);
+    }
+}
+    </script>
 </body>
 </html>
