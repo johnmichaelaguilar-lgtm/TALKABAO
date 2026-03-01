@@ -1,93 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="logo.png">
-    <link rel="stylesheet" href="homeStyle.css">
-    <title>HOME</title>
+<meta charset="UTF-8">
+<title>TALKABAO</title>
 </head>
 <body>
-    <img src="logo.png" alt="logo" width="50" height="50">
-    <h1>TALKABAO</h1>
-    <p>Type text, click Translate, and see literal & casual translations! Try it now!</p>
 
-    <div id="translatorControls">
-        <label for="inputText">Enter text to Translate:</label>
-        <textarea id="inputText" placeholder="Type your text here..." rows="4" cols="40"></textarea>
-        <br>
+<h1>TALKABAO</h1>
+<textarea id="inputText" rows="4" cols="40" placeholder="Type text here..."></textarea>
+<br>
+<select id="targetLang">
+    <option value="es">Spanish</option>
+    <option value="fr">French</option>
+    <option value="de">German</option>
+    <option value="ja">Japanese</option>
+    <option value="ko">Korean</option>
+    <option value="tl">Filipino</option>
+</select>
+<br>
+<button id="translateBtn">Translate</button>
 
-        <label for="targetLang">Choose language:</label>
-        <select id="targetLang">
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="tl">Filipino</option>
-        </select>
-        <br>
+<p id="status">Status: Ready</p>
+<p id="translatedText"></p>
 
-        <button id="translateBtn">Translate</button>
-        <br>
-        <label><input type="checkbox" id="serviceToggle" checked> Service Online</label>
-    </div>
-
-    <p id="status">Status: Ready</p>
-
-    <div id="translatedOutput">
-        <h3>Translation:</h3>
-        <p id="translatedText"></p>
-        <button id="speakBtn">Speak</button>
-    </div>
-
-    <p>Literal translations follow formal grammar. Casual translations are more natural for everyday conversation.</p>
-
-    <script>
-const backendURL = "https://johnmichaelaguilar.atwebpages.com/translate.php";
-
+<script>
+const translateBtn = document.getElementById("translateBtn");
 const inputText = document.getElementById("inputText");
 const targetLang = document.getElementById("targetLang");
 const translatedText = document.getElementById("translatedText");
 const status = document.getElementById("status");
 
-document.getElementById("translateBtn").addEventListener("click", translateText);
-
-async function translateText() {
+translateBtn.addEventListener("click", async () => {
     const text = inputText.value.trim();
-    const lang = targetLang.value;
-
-    if (!text) {
-        alert("Please type some text to translate!");
-        return;
-    }
+    if (!text) return alert("Type something!");
 
     status.textContent = "Status: Translating...";
     translatedText.textContent = "";
 
-    // Use form data instead of JSON
-    const formData = new URLSearchParams();
-    formData.append("text", text);
-    formData.append("target", lang);
-
     try {
-        const response = await fetch(backendURL, {
+        const res = await fetch("https://libretranslate.com/translate", {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: formData.toString()
+            body: JSON.stringify({
+                q: text,
+                source: "en",
+                target: targetLang.value,
+                format: "text"
+            }),
+            headers: { "Content-Type": "application/json" }
         });
-
-        const data = await response.json();
-
-        if (data.error) throw new Error(data.error);
-
-        translatedText.textContent = data.translated_text || "No translation returned.";
+        const data = await res.json();
+        translatedText.textContent = data.translatedText || "No translation returned.";
         status.textContent = "Status: Ready";
     } catch (err) {
         console.error(err);
         status.textContent = "Status: Error!";
         alert("Translation failed: " + err.message);
     }
-}
-    </script>
+});
+</script>
+
 </body>
 </html>
