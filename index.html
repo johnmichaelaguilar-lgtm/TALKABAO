@@ -7,14 +7,10 @@
     <title>HOME</title>
 </head>
 <body>
-    <!-- Logo -->
     <img src="logo.png" alt="logo" width="50" height="50">
-
-    <!-- Title & Instruction -->
     <h1>TALKABAO</h1>
     <p>Type text, click Translate, and see literal & casual translations! Try it now!</p>
 
-    <!-- Translator Controls -->
     <div id="translatorControls">
         <label for="inputText">Enter text to Translate:</label>
         <textarea id="inputText" placeholder="Type your text here..." rows="4" cols="40"></textarea>
@@ -33,22 +29,17 @@
 
         <button id="translateBtn">Translate</button>
         <br>
-        <label>
-            <input type="checkbox" id="serviceToggle" checked> Service Online
-        </label>
+        <label><input type="checkbox" id="serviceToggle" checked> Service Online</label>
     </div>
 
-    <!-- Status Indicator -->
     <p id="status">Status: Ready</p>
 
-    <!-- Output -->
     <div id="translatedOutput">
         <h3>Translation:</h3>
         <p id="translatedText"></p>
         <button id="speakBtn">Speak</button>
     </div>
 
-    <!-- Info -->
     <p>Literal translations follow formal grammar. Casual translations are more natural for everyday conversation.</p>
 
     <script>
@@ -59,8 +50,7 @@ const targetLang = document.getElementById("targetLang");
 const translatedText = document.getElementById("translatedText");
 const status = document.getElementById("status");
 
-document.getElementById("translateBtn")
-  .addEventListener("click", translateText);
+document.getElementById("translateBtn").addEventListener("click", translateText);
 
 async function translateText() {
     const text = inputText.value.trim();
@@ -74,11 +64,16 @@ async function translateText() {
     status.textContent = "Status: Translating...";
     translatedText.textContent = "";
 
+    // Use form data instead of JSON
+    const formData = new URLSearchParams();
+    formData.append("text", text);
+    formData.append("target", lang);
+
     try {
         const response = await fetch(backendURL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: text, target: lang })
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formData.toString()
         });
 
         const data = await response.json();
@@ -93,6 +88,6 @@ async function translateText() {
         alert("Translation failed: " + err.message);
     }
 }
-</script>
+    </script>
 </body>
 </html>
