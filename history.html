@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TALKABAO - History</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="history-page">
+
+    <div class="notebook-container">
+        <h2 class="history-title">HISTORY LOG</h2>
+
+        <div class="history-content-area">
+            <div id="historyList">Loading history...</div>
+        </div>
+
+        <div class="history-footer">
+            <a href="index.html" class="back-link">← BACK</a>
+            <button class="clear-btn-ink" onclick="@@@@clearData()">WIPE ALL</button>
+        </div>
+    </div>
+
+    <a href="settings.html" class="settingsBtn">
+        <img src="settings.png" alt="Settings" width="40">
+    </a>
+
+<script>
+    // --- Your original JS logic (Keep this exactly as is) ---
+    function loadHistory() {
+        const listArea = document.getElementById("historyList");
+        const history = JSON.parse(localStorage.getItem("talkabao_data")) || [];
+
+        if (history.length === 0) {
+            listArea.innerHTML = "<p class='empty-msg'>The book is empty...</p>";
+            return;
+        }
+
+        listArea.innerHTML = history.map(item => `
+            <div class="item">
+                <div class="meta">${item.from.toUpperCase()} ➡ ${item.to.toUpperCase()} | ${item.time}</div>
+                <div class="source">${item.source}</div>
+                <div class="result">${item.result}</div>
+            </div>
+        `).join('');
+    }
+
+    function clearData() {
+        if(confirm("Wipe all history?")) {
+            localStorage.removeItem("talkabao_data");
+            loadHistory();
+        }
+    }
+    loadHistory();
+</script>
+</body>
+</html>

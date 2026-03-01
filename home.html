@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TALKABAO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="logo-placeholder">
+    <img src="logo.png" alt="logo" width="80">
+</div>
+
+<div class="mainContainer">
+    <h2 class="title">TALKABAO</h2>
+
+    <div class="content-row">
+        <div class="wrapSource">
+            <div class="sourceContainer">
+                <div class="controls">
+                    <div class="lang-selector">
+                        <span class="label-tag">from</span>
+                        <select id="sourceLang">
+                            <option value="auto">Auto-Detect</option>
+                            <option value="en">English</option>
+                            <option value="es">Spanish</optio>
+                            <option value="fr">French</option>
+                            <option value="de">German</option>
+                            <option value="tl">Tagalog</option>
+                            <option value="ja">Japanese</option>
+                        </select>
+                    </div>
+                    <textarea id="sourceText" placeholder="Enter text here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-controls">
+            <a id="history" href="history.html" class="icon-btn">
+                <img src="1.png" alt="History">
+                <span>History</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="translate-action">
+        <button id="translateBtn" class="big-translate-btn">Translate</button>
+    </div>
+
+    <div class="outputContainer">
+        <div class="lang-selector">
+            <span class="label-tag">to</span>
+            <select id="targetLang">
+                <option value="en">English</option>
+                <option value="es" selected>Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="tl">Tagalog</option>
+                <option value="ja">Japanese</option>
+            </select>
+            <span class="translation-label">translation</span>
+        </div>
+        
+        <textarea id="output" readonly>Enter text here...</textarea>
+        
+        <button class="copy-btn">COPY</button>
+    </div>
+
+</div>
+
+<div class="footer-tools">
+    <a id="muteBtn" class="muteBtn">
+        <img src="music.png" alt="Music" width="40">
+    </a>
+    <a href="settings.html" class="settingsBtn">
+        <img src="settings.png" alt="Settings" width="40">
+    </a>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="miniCandyBGMusic.mp3" type="audio/mpeg">
+</audio>
+
+<script src="script.js" defer></script>
+</body>
+</html>
